@@ -2,7 +2,7 @@ let nombre = prompt('nombre del pokemon a buscar').toLowerCase()
 let info = document.getElementById('info')
 let sprite = document.getElementById('sprite')
 
-const obtenerPokemon = async (str) => {
+const obtenerPokemon = async str => {
     try {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${str}`)
         const data = await res.json()
@@ -15,7 +15,7 @@ const obtenerPokemon = async (str) => {
     }
 }
 
-const flUpper = (word) => {
+const flUpper = word => {
     return word
     .toLowerCase()
     .split(' ')
@@ -23,10 +23,10 @@ const flUpper = (word) => {
     .join(' ');
 }
 
-const renderInfo = (data) => {
-    const { id, name, weight, sprites, height, types } = data
+const renderInfo = data => {
+    const { id, name, weight, sprites, height, types, abilities } = data
 
-    const { type } = types
+    
     let pokeId = document.createElement('p')
     let pokeIdText = document.createTextNode(`Numero: ${id}`)
     pokeId.appendChild(pokeIdText)
@@ -38,6 +38,15 @@ const renderInfo = (data) => {
     let pokeType = document.createElement('p')
     let pokeTypeText = document.createTextNode(`Tipo: ${flUpper(types[0].type.name)}`)
     pokeType.appendChild(pokeTypeText)
+
+    const pA = abilities.map(el => {
+        const { ability } = el
+        return `${flUpper(ability.name)}`
+    })
+
+    let pokeAbilities = document.createElement('p')
+    let pokeAbilitiesText = document.createTextNode(`Habilidades: ${pA.join(',\n')}`)
+    pokeAbilities.appendChild(pokeAbilitiesText)
 
     let pokeHeight = document.createElement('p')
     let pokeHeightText = document.createTextNode(`Altura: ${height}`)
@@ -53,6 +62,7 @@ const renderInfo = (data) => {
     info.appendChild(pokeId)
     info.appendChild(pokeName)
     info.appendChild(pokeType)
+    info.appendChild(pokeAbilities)
     info.appendChild(pokeHeight)
     info.appendChild(pokeWeight)
     sprite.appendChild(img)
